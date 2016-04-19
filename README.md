@@ -12,7 +12,7 @@ Use Block.IO's API to bulk-send cryptocoins (BTC/LTC/DOGE) to lists of addresses
 # Notes
 These are two entirely separate projects and Solutions and please don't combine them. The airgap is there as a basic reassurance that "the thing which generates your private keys" is NOT "the thing that uses the internet at all". The Printer app can (and probably should) be run with no internet connection.
 
-When the Printer generates a PDF of paper wallets, it also generates a matching log file containing the addresses to go with them (but *not* the private keys). Copy-paste those addresses in to the big text field on the Loader main form. (Proper file-loading feature is coming soon)
+When the Printer generates a PDF of paper wallets, it also generates a matching log file containing the addresses to go with them (but *not* the private keys). Import that log in the Loader file and it will extract the addresses - or you can copy-paste a list of addresses from anywhere else.
 
 
 
