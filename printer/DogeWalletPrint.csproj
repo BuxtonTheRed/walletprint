@@ -61,6 +61,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon mk 1-notrans.ico</ApplicationIcon>
