@@ -13,8 +13,9 @@ using System.Threading;
 using block_io_sharp;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.IO;
 
-namespace WalletStuffer
+namespace WalletLoader
 {
     public partial class frmSender : Form
     {
@@ -206,13 +207,15 @@ namespace WalletStuffer
         // Show the About box from the Help\About menu item
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Multi-Coin Wallet Stuffer by Buxton The Red. See reddit.com/r/walletprint for further help and support. Uses Block.IO's services for the back-end, you will need an account with them.", "About This Utility", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string aboutText = string.Format("Multi-Coin Wallet Loader by Buxton The Red.\nVersion: {0}\nSee reddit.com/r/walletprint for further help and support.", Application.ProductVersion);
+
+            MessageBox.Show(aboutText, "About Wallet Loader", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
         #endregion
 
-
+        // actually do the work
         private void btnSend_Click(object sender, EventArgs e)
         {
             // validate API Key
@@ -425,7 +428,7 @@ namespace WalletStuffer
             }
         }
 
-
+        // local regex sanity-check to ensure the provided apikey is even slightly right
         private bool isValidApiKey(string apikey)
         {
             Regex r = new Regex("[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}");
@@ -433,7 +436,7 @@ namespace WalletStuffer
             return r.IsMatch(apikey);
         }
 
-
+        // ask block.io for the Addresses (really we care about the Labels) for a given apikey, and update the UI if successful (this is also how we detect the cointype)
         private bool tryGetAddresses(string apikey)
         {
             try
@@ -498,9 +501,7 @@ namespace WalletStuffer
             {
                 return;
             }
-
-
-
+            
             // when the ddlCoinFraction dropdown selection is changed, rebase the value of txtSendAmount to follow along
 
             // first, check that the textbox contains an intelligible Decimal. if not, no reprocessing happens
@@ -564,6 +565,72 @@ namespace WalletStuffer
 
         private void txtSendAmount_TextChanged(object sender, EventArgs e)
         {
+
+        }
+
+        // load a logfile produced by the Wallet Printer app and get the generated Addresses from it
+        private void btnLoadAddressesFromLog_Click(object sender, EventArgs e)
+        {
+            // show the Open dialog, and only proceed if the user properly selected a file
+            if (ofdLoadPrinterLog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            List<string> addresses = new List<string>();
+            bool seenAddressBlock = false;  // track if we see an address block (marked by "Generated Addresses:") at any point in the file
+
+            // as soon as we exit this Using block, the StreamReader will be properly disposed automatically
+            using (StreamReader r = new StreamReader(ofdLoadPrinterLog.FileName))
+            {
+                string line;
+                bool inAddressBlock = false;
+                while ((line = r.ReadLine()) != null)
+                {
+                    line = line.Trim();
+
+                    switch (line)
+                    {
+                        // start paying attention to lines after we see "Generated Addresses:"
+                        case "Generated Addresses:":
+                            inAddressBlock = true;
+                            seenAddressBlock = true;
+                            break;
+                        // stop paying attention after we see "end"
+                        case "end":
+                            inAddressBlock = false;
+                            break;
+                        default:
+                            // if we are in the midst of a paying-attention block, add this line to the Addresses list
+                            if (inAddressBlock)
+                            {
+                                addresses.Add(line);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            // if we got any addresses out of the file, put them in the textbox
+            if (addresses.Count > 0)
+            {
+                txtAddresses.Lines = addresses.Where(L => L.Trim() != "").ToArray();
+            }
+            else
+            {
+                // didn't find anything in the file...
+                if (seenAddressBlock)
+                {
+                    MessageBox.Show("No addresses found in file, but it looked like the right format", "No addresses loaded", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("File does not contain expected marker", "No addresses loaded", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+
+
 
         }
     }

@@ -34,7 +34,9 @@ namespace DogeAddress.Forms
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Multi-Coin Wallet Printer by Buxton The Red\n\nBased on Bitcoin Address Utility by Casascius\n(Licence: GNU GPL v3)\n\nhttp://reddit.com/r/walletprint for support and discussion", "About Multi-Coin Wallet Printer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string aboutText = string.Format("Multi-Coin Wallet Printer by Buxton The Red.\nVersion: {0}\nSee reddit.com/r/walletprint for further help and support.", Application.ProductVersion);
+
+            MessageBox.Show(aboutText, "About Wallet Printer", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -48,6 +50,7 @@ namespace DogeAddress.Forms
         private void btnFirstPrototype_Click(object sender, EventArgs e)
         {
             // todo: take this out of the UI thread, put it in a class and run on a worker thread
+            // and also rename this button - it's been a long time since this was my original prototype
 
             string previousCaption = this.Text;
 
@@ -81,6 +84,8 @@ namespace DogeAddress.Forms
 
             int batchNumber = 1;
 
+            // note: if you change anything that gets written to logFile from this point until the end-marker is written, this will probably cause
+            // compatibility issues with the Loader tool, which expects to be able to parse the log between these points
             logFile.WriteLine("Generated Addresses:");
             logFile.WriteLine();
 
@@ -123,6 +128,8 @@ namespace DogeAddress.Forms
 
             logFile.WriteLine();
             logFile.WriteLine("end");
+
+            // ok, you can fiddle with the logFile again now
 
             logFile.Close();
             
@@ -231,6 +238,7 @@ namespace DogeAddress.Forms
 
         }
 
+        // draws a single Paper Wallet in to a PdfSharp XForm
         private PdfSharp.Drawing.XForm getSingleWallet(PdfDocument doc, WalletBundle b, string address, string privkey, int numberWithinBatch, bool layoutDebugging)
         {
             WalletTemplate t = b.template;
@@ -398,162 +406,6 @@ namespace DogeAddress.Forms
         }
 
 
-
-        //private PdfSharp.Drawing.XForm getPrototypeWallet(PdfDocument doc, string address, string privkey, bool layoutDebugging)
-        //{
-        //    int width = 188;
-        //    int height = 40;
-
-        //    XUnit walletSizeWide = XUnit.FromMillimeter(width);
-        //    XUnit walletSizeHigh = XUnit.FromMillimeter(height);
-
-        //    PdfSharp.Drawing.XForm form = new PdfSharp.Drawing.XForm(doc, walletSizeWide, walletSizeHigh);
-
-        //    // put the background graphic on it
-        //    string imagepath = @"D:\!!DROPBOX\Dropbox\Dogecoin\paper wallets\My Gift Card system\my Wallet Printer app\assets\blank-v2.png";
-
-        //    using (XGraphics formGfx = XGraphics.FromForm(form))
-        //    {
-        //        XGraphicsState state = formGfx.Save();
-
-        //        formGfx.DrawImage(XImage.FromFile(imagepath), new RectangleF(0f, 0f, (float)walletSizeWide.Point, (float)walletSizeHigh.Point));
-
-        //        // draw the QR codes and legible-text things
-
-        //        // Address
-        //        // QR
-        //        Bitmap bmpAddress = BtcAddress.QR.EncodeQRCode(address);
-        //        XImage imgAddress = XImage.FromGdiPlusImage(bmpAddress);
-        //        imgAddress.Interpolate = false;
-
-        //        XUnit addressQrLeft = XUnit.FromMillimeter(35.15);
-        //        XUnit addressQrTop = XUnit.FromMillimeter(6.95);
-        //        XUnit addressQrSize = XUnit.FromMillimeter(26.44);
-
-        //        XRect addressQrRect = new XRect(addressQrLeft.Point, addressQrTop.Point, addressQrSize.Point, addressQrSize.Point);
-
-        //        formGfx.DrawImage(imgAddress, addressQrRect);
-
-        //        // legible
-        //        string addressSplitForLines = lineSplitter(address, 12);
-        //        XFont fontAddress = new XFont("Courier New", 10, XFontStyle.Regular);
-        //        XTextFormatter tf = new XTextFormatter(formGfx);
-
-        //        XUnit addressTxtLeft = XUnit.FromMillimeter(4.16);
-        //        XUnit addressTxtTop = XUnit.FromMillimeter(20.95);
-        //        XUnit addressTxtWidth = XUnit.FromMillimeter(27.65);
-        //        XUnit addressTxtHeight = XUnit.FromMillimeter(12.36);
-
-        //        XRect addressRect = new XRect(addressTxtLeft.Point, addressTxtTop.Point, addressTxtWidth.Point, addressTxtHeight.Point);
-        //        tf.Alignment = XParagraphAlignment.Center;
-
-        //        TextRotation addressTxtRotation = TextRotation.Normal;
-        //        double addressTxtRotationDegrees = RotationMarkerToDegrees(addressTxtRotation);
-
-        //        if (layoutDebugging)
-        //        {
-        //            formGfx.DrawRectangle(XBrushes.PowderBlue, addressRect);
-        //        }
-
-        //        XPoint rotateCentre = new XPoint(addressTxtLeft + (addressTxtWidth / 2), addressTxtTop + (addressTxtHeight / 2));
-        //        XPoint matrixRotatePoint = new XPoint(addressRect.X + (addressRect.Width / 2), addressRect.Y + (addressRect.Height / 2));
-
-        //        XMatrix rotateMatrix = new XMatrix();
-        //        rotateMatrix.RotateAtAppend(addressTxtRotationDegrees, rotateCentre);
-        //        addressRect.Transform(rotateMatrix);
-
-        //        if (layoutDebugging)
-        //        {
-        //            // draw a little tracer dot for where the centre of rotation is going to be
-        //            double rotateDotSize = 2.0;
-        //            formGfx.DrawEllipse(XBrushes.Red, rotateCentre.X - (rotateDotSize / 2), rotateCentre.Y - (rotateDotSize / 2), rotateDotSize, rotateDotSize);
-        //        }
-
-        //        // maybe even do some rotation of the lovely text!
-        //        formGfx.Save();
-                
-        //        formGfx.RotateAtTransform(0, rotateCentre);
-        //        if (layoutDebugging)
-        //        {
-        //            formGfx.DrawRectangle(XPens.OrangeRed, addressRect);
-        //        }
-        //        tf.DrawString(addressSplitForLines, fontAddress, XBrushes.Black, addressRect);
-        //        formGfx.Restore();
-
-        //        // Privkey
-        //        // QR
-        //        Bitmap bmpPrivkey = BtcAddress.QR.EncodeQRCode(privkey);
-        //        XImage imgPrivkey = XImage.FromGdiPlusImage(bmpPrivkey);
-        //        imgPrivkey.Interpolate = false;
-
-        //        XUnit privkeyQrLeft = XUnit.FromMillimeter(73.0);
-        //        XUnit privkeyQrTop = XUnit.FromMillimeter(3.75);
-        //        XUnit privkeyQrSize = XUnit.FromMillimeter(32.85);
-
-        //        XRect privkeyQrRect = new XRect(privkeyQrLeft.Point, privkeyQrTop.Point, privkeyQrSize.Point, privkeyQrSize.Point);
-
-
-        //        formGfx.DrawImage(imgPrivkey, privkeyQrRect);
-
-        //        // legible
-        //        string privkeySplitForLines = lineSplitter(privkey, 17);
-
-        //        XFont fontPrivkey = new XFont("Courier New", 9.5, XFontStyle.Regular);
-
-        //        XUnit privkeyTxtLeft = XUnit.FromMillimeter(108.47);
-        //        XUnit privkeyTxtTop = XUnit.FromMillimeter(2.15);
-        //        XUnit privkeyTxtWidth = XUnit.FromMillimeter(18.95);
-        //        XUnit privkeyTxtHeight = XUnit.FromMillimeter(36.17);
-
-
-
-        //        TextRotation privkeyTxtRotation = TextRotation.CounterClockwise;
-        //        double privkeyTxtRotationDegrees = RotationMarkerToDegrees(privkeyTxtRotation);
-
-        //        XRect privkeyRect = new XRect(privkeyTxtLeft.Point, privkeyTxtTop.Point, privkeyTxtWidth.Point, privkeyTxtHeight.Point);
-
-        //        if (layoutDebugging)
-        //        {
-        //            // draw a tracer rectangle for the original un-rotated text rectangle
-        //            formGfx.DrawRectangle(XBrushes.PowderBlue, privkeyRect);
-        //        }
-
-        //        // rotate that lovely text around its middle when drawing!
-        //        rotateCentre = new XPoint(privkeyTxtLeft + (privkeyTxtWidth / 2), privkeyTxtTop + (privkeyTxtHeight / 2));
-                
-        //        matrixRotatePoint = new XPoint(privkeyRect.X + (privkeyRect.Width / 2), privkeyRect.Y + (privkeyRect.Height / 2));
-
-        //        rotateMatrix = new XMatrix();
-        //        rotateMatrix.RotateAtAppend(privkeyTxtRotationDegrees, rotateCentre);
-        //        privkeyRect.Transform(rotateMatrix);
-
-        //        if (layoutDebugging)
-        //        {
-        //            // draw a little tracer dot for where the centre of rotation is going to be
-        //            double rotateDotSize = 2.0;
-        //            formGfx.DrawEllipse(XBrushes.Red, rotateCentre.X - (rotateDotSize / 2), rotateCentre.Y - (rotateDotSize / 2), rotateDotSize, rotateDotSize);
-        //        }
-
-        //        formGfx.Save();
-
-        //        formGfx.RotateAtTransform(privkeyTxtRotationDegrees, rotateCentre);
-
-        //        if (layoutDebugging)
-        //        {
-        //            formGfx.DrawRectangle(XPens.OrangeRed, privkeyRect);
-        //        }
-
-        //        //tf.DrawString(privkeySplitForLines, fontPrivkey, XBrushes.Gray, privkeyRect);
-        //        tf.DrawString(privkeySplitForLines, fontPrivkey, XBrushes.Red, privkeyRect);
-
-        //        formGfx.Restore();
-        //    }
-
-
-
-        //    return form;
-        //}
-
         private XRect MakeXRectForRotation(double x, double y, double width, double height, TextRotation rotation)
         {
             double _x = x;
@@ -600,6 +452,7 @@ namespace DogeAddress.Forms
                 FileInfo info = new FileInfo(txtTemplateFilePath.Text);
                 // harvest some free bonus entropy from the size, filepath, and last access time of the selected template
                 ExtraEntropy.AddExtraEntropy(info.Length.ToString() + txtTemplateFilePath.Text  + info.LastAccessTimeUtc.ToLongTimeString());
+                // note: this is NOT the only entropy in use - it just pleases me to put some extra in there because we can
 
                 try
                 {

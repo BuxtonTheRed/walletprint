@@ -1,4 +1,4 @@
-﻿namespace WalletStuffer
+﻿namespace WalletLoader
 {
     partial class frmAddressChecker
     {

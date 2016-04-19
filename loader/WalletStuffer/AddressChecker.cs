@@ -18,7 +18,7 @@ using System.Collections;
 // It's the easiest way to check that you have correctly sent the intended value to each of your Paper Wallet Addresses!
 
 
-namespace WalletStuffer
+namespace WalletLoader
 {
     public partial class frmAddressChecker : Form
     {

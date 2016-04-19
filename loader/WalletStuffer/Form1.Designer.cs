@@ -1,4 +1,4 @@
-﻿namespace WalletStuffer
+﻿namespace WalletLoader
 {
     partial class frmSender
     {
@@ -51,12 +51,14 @@
             this.lblApiKeyInvalidFormat = new System.Windows.Forms.Label();
             this.ddlTakeFromLabel = new System.Windows.Forms.ComboBox();
             this.lblSetApiKey = new System.Windows.Forms.Label();
+            this.btnLoadAddressesFromLog = new System.Windows.Forms.Button();
+            this.ofdLoadPrinterLog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(273, 482);
+            this.btnSend.Location = new System.Drawing.Point(272, 482);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(137, 48);
             this.btnSend.TabIndex = 7;
@@ -103,7 +105,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 182);
+            this.label3.Location = new System.Drawing.Point(12, 185);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(104, 13);
             this.label3.TabIndex = 5;
@@ -111,11 +113,11 @@
             // 
             // txtAddresses
             // 
-            this.txtAddresses.Location = new System.Drawing.Point(12, 198);
+            this.txtAddresses.Location = new System.Drawing.Point(11, 210);
             this.txtAddresses.Multiline = true;
             this.txtAddresses.Name = "txtAddresses";
             this.txtAddresses.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAddresses.Size = new System.Drawing.Size(398, 278);
+            this.txtAddresses.Size = new System.Drawing.Size(398, 266);
             this.txtAddresses.TabIndex = 6;
             // 
             // label4
@@ -146,7 +148,7 @@
             // chkIncludeWithdrawFee
             // 
             this.chkIncludeWithdrawFee.AutoSize = true;
-            this.chkIncludeWithdrawFee.Location = new System.Drawing.Point(107, 162);
+            this.chkIncludeWithdrawFee.Location = new System.Drawing.Point(107, 155);
             this.chkIncludeWithdrawFee.Name = "chkIncludeWithdrawFee";
             this.chkIncludeWithdrawFee.Size = new System.Drawing.Size(147, 17);
             this.chkIncludeWithdrawFee.TabIndex = 12;
@@ -262,11 +264,29 @@
             this.lblSetApiKey.TabIndex = 19;
             this.lblSetApiKey.Text = "Set API Key\r\nto load Labels\r\n";
             // 
+            // btnLoadAddressesFromLog
+            // 
+            this.btnLoadAddressesFromLog.Location = new System.Drawing.Point(220, 178);
+            this.btnLoadAddressesFromLog.Name = "btnLoadAddressesFromLog";
+            this.btnLoadAddressesFromLog.Size = new System.Drawing.Size(190, 26);
+            this.btnLoadAddressesFromLog.TabIndex = 20;
+            this.btnLoadAddressesFromLog.Text = "Load from Wallet Printer log file...";
+            this.btnLoadAddressesFromLog.UseVisualStyleBackColor = true;
+            this.btnLoadAddressesFromLog.Click += new System.EventHandler(this.btnLoadAddressesFromLog_Click);
+            // 
+            // ofdLoadPrinterLog
+            // 
+            this.ofdLoadPrinterLog.DefaultExt = "txt";
+            this.ofdLoadPrinterLog.Filter = ".txt files|*.txt|All files|*.*";
+            this.ofdLoadPrinterLog.SupportMultiDottedExtensions = true;
+            this.ofdLoadPrinterLog.Title = "Select a logfile produced by Wallet Printer";
+            // 
             // frmSender
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 539);
+            this.ClientSize = new System.Drawing.Size(421, 540);
+            this.Controls.Add(this.btnLoadAddressesFromLog);
             this.Controls.Add(this.lblSetApiKey);
             this.Controls.Add(this.ddlTakeFromLabel);
             this.Controls.Add(this.lblApiKeyInvalidFormat);
@@ -322,6 +342,8 @@
         private System.Windows.Forms.Label lblApiKeyInvalidFormat;
         private System.Windows.Forms.ComboBox ddlTakeFromLabel;
         private System.Windows.Forms.Label lblSetApiKey;
+        private System.Windows.Forms.Button btnLoadAddressesFromLog;
+        private System.Windows.Forms.OpenFileDialog ofdLoadPrinterLog;
     }
 }
 

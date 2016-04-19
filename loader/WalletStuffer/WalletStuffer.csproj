@@ -7,8 +7,8 @@
     <ProjectGuid>{3EDD6306-C82D-4B49-9570-B9B148497DAD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WalletStuffer</RootNamespace>
-    <AssemblyName>WalletStuffer</AssemblyName>
+    <RootNamespace>WalletLoader</RootNamespace>
+    <AssemblyName>WalletLoader</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>905d0c57</NuGetPackageImportStamp>
@@ -92,6 +92,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
