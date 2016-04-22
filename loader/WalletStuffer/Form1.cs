@@ -394,9 +394,7 @@ namespace WalletLoader
                 // bail out of this Function entirely (give up the process)
                 return;
             }
-
-
-
+            
         }
 
 
@@ -407,6 +405,12 @@ namespace WalletLoader
             if (isValidApiKey(apikey))
             {
                 lblApiKeyInvalidFormat.Visible = false;
+
+                this.UseWaitCursor = true;
+                lblPleaseWait.Visible = true;
+
+                // yes, calling DoEvents is slightly poor form, and really anything which takes "long" rather than "instant" time should ideally be threaded... 
+                Application.DoEvents();
 
                 if (tryGetAddresses(apikey))
                 {
@@ -420,6 +424,9 @@ namespace WalletLoader
                     lblSetApiKey.Visible = true;
                     ddlCoinFraction.Enabled = false;
                 }
+
+                this.UseWaitCursor = false;
+                lblPleaseWait.Visible = false;
 
             }
             else
@@ -439,6 +446,7 @@ namespace WalletLoader
         // ask block.io for the Addresses (really we care about the Labels) for a given apikey, and update the UI if successful (this is also how we detect the cointype)
         private bool tryGetAddresses(string apikey)
         {
+
             try
             {
                 BlockIO client = new BlockIO(apikey);
@@ -483,8 +491,7 @@ namespace WalletLoader
             {
                 // that didn't work...
                 string errmsg = string.Format("Error when asking Block.Io for Address/Label List.\nInternal Error message is:\n{0}", ex.Message);
-                MessageBox.Show(errmsg, "Error when getting Label List", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show(errmsg, "Error getting Label List", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

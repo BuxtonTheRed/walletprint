@@ -46,6 +46,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
             this.lblCoinType = new System.Windows.Forms.Label();
             this.ddlCoinFraction = new System.Windows.Forms.ComboBox();
             this.lblApiKeyInvalidFormat = new System.Windows.Forms.Label();
@@ -53,7 +54,7 @@
             this.lblSetApiKey = new System.Windows.Forms.Label();
             this.btnLoadAddressesFromLog = new System.Windows.Forms.Button();
             this.ofdLoadPrinterLog = new System.Windows.Forms.OpenFileDialog();
-            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblPleaseWait = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -212,6 +213,13 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // tsmiGoToWikiPage
+            // 
+            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
+            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
+            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
+            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
+            // 
             // lblCoinType
             // 
             this.lblCoinType.AutoSize = true;
@@ -283,18 +291,23 @@
             this.ofdLoadPrinterLog.SupportMultiDottedExtensions = true;
             this.ofdLoadPrinterLog.Title = "Select a logfile produced by Wallet Printer";
             // 
-            // tsmiGoToWikiPage
+            // lblPleaseWait
             // 
-            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
-            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
-            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
-            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
+            this.lblPleaseWait.AutoSize = true;
+            this.lblPleaseWait.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPleaseWait.Location = new System.Drawing.Point(254, 31);
+            this.lblPleaseWait.Name = "lblPleaseWait";
+            this.lblPleaseWait.Size = new System.Drawing.Size(87, 13);
+            this.lblPleaseWait.TabIndex = 21;
+            this.lblPleaseWait.Text = "Please Wait...";
+            this.lblPleaseWait.Visible = false;
             // 
             // frmSender
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 540);
+            this.Controls.Add(this.lblPleaseWait);
             this.Controls.Add(this.btnLoadAddressesFromLog);
             this.Controls.Add(this.lblSetApiKey);
             this.Controls.Add(this.ddlTakeFromLabel);
@@ -317,7 +330,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "frmSender";
-            this.Text = "Wallet Stuffer";
+            this.Text = "Wallet Loader";
             this.Load += new System.EventHandler(this.frmSender_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -354,6 +367,7 @@
         private System.Windows.Forms.Button btnLoadAddressesFromLog;
         private System.Windows.Forms.OpenFileDialog ofdLoadPrinterLog;
         private System.Windows.Forms.ToolStripMenuItem tsmiGoToWikiPage;
+        private System.Windows.Forms.Label lblPleaseWait;
     }
 }
 

@@ -59,6 +59,10 @@ namespace DogeAddress.Forms
 
             this.UseWaitCursor = true;
 
+            // todo: move all the grunt work in to a nice proper Threaded situation
+            // meanwhile, DoEvents is called here to allow the wait cursor, form caption and other "I'm busy..." indicators to be shown to the user before we get into the hard stuff that takes a few moments
+            Application.DoEvents();
+
             string outputFile = txtOutputFile.Text;
             string logFilePath = string.Format("{0} - LOG {1}.txt", outputFile, DateTime.Now.ToString("yyyy-MM-dd HHmmss"));
 
