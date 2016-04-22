@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPrototype));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -35,6 +36,7 @@
             this.layoutDebuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
             this.btnFirstPrototype = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtTemplateFilePath = new System.Windows.Forms.TextBox();
@@ -49,7 +51,6 @@
             this.chkWipeOutputAfterViewing = new System.Windows.Forms.CheckBox();
             this.sfdOutputFile = new System.Windows.Forms.SaveFileDialog();
             this.btnOpenEditor = new System.Windows.Forms.Button();
-            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,6 +112,13 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // tsmiGoToWikiPage
+            // 
+            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
+            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
+            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
+            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
             // 
             // btnFirstPrototype
             // 
@@ -242,13 +250,6 @@
             this.btnOpenEditor.UseVisualStyleBackColor = true;
             this.btnOpenEditor.Click += new System.EventHandler(this.btnOpenEditor_Click);
             // 
-            // tsmiGoToWikiPage
-            // 
-            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
-            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
-            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
-            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
-            // 
             // frmPrototype
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -268,6 +269,7 @@
             this.Controls.Add(this.btnFirstPrototype);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "frmPrototype";

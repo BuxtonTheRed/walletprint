@@ -64,7 +64,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon mk 1-notrans.ico</ApplicationIcon>
+    <ApplicationIcon>icon-printer.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>BtcAddress.Program</StartupObject>
@@ -180,9 +180,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bitcoinlogo.ico" />
-    <Content Include="favicon.ico" />
-    <Content Include="icon mk 1-notrans.ico" />
+    <Content Include="icon-printer.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
