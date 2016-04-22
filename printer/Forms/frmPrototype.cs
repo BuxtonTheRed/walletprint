@@ -523,5 +523,27 @@ namespace DogeAddress.Forms
             layoutDebuggingToolStripMenuItem.Checked = !layoutDebuggingToolStripMenuItem.Checked;
 
         }
+
+        // "Help\Go To Wiki Page" implementation - invokes default web browser
+        private void tsmiGoToWikiPage_Click(object sender, EventArgs e)
+        {
+            string url = "https://www.reddit.com/r/walletprint/wiki/printer";
+
+            try
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                if (ex.ErrorCode == -2147467259)
+                {
+                    MessageBox.Show(ex.Message, "No System Default Browser", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error Launching Browser", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -53,6 +53,7 @@
             this.lblSetApiKey = new System.Windows.Forms.Label();
             this.btnLoadAddressesFromLog = new System.Windows.Forms.Button();
             this.ofdLoadPrinterLog = new System.Windows.Forms.OpenFileDialog();
+            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -198,7 +199,8 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.tsmiGoToWikiPage});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
@@ -206,7 +208,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -281,6 +283,13 @@
             this.ofdLoadPrinterLog.SupportMultiDottedExtensions = true;
             this.ofdLoadPrinterLog.Title = "Select a logfile produced by Wallet Printer";
             // 
+            // tsmiGoToWikiPage
+            // 
+            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
+            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
+            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
+            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
+            // 
             // frmSender
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -344,6 +353,7 @@
         private System.Windows.Forms.Label lblSetApiKey;
         private System.Windows.Forms.Button btnLoadAddressesFromLog;
         private System.Windows.Forms.OpenFileDialog ofdLoadPrinterLog;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGoToWikiPage;
     }
 }
 

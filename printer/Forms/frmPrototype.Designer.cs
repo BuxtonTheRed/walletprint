@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.layoutDebuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnFirstPrototype = new System.Windows.Forms.Button();
@@ -47,8 +49,7 @@
             this.chkWipeOutputAfterViewing = new System.Windows.Forms.CheckBox();
             this.sfdOutputFile = new System.Windows.Forms.SaveFileDialog();
             this.btnOpenEditor = new System.Windows.Forms.Button();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.layoutDebuggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiGoToWikiPage = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,10 +80,27 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.layoutDebuggingToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // layoutDebuggingToolStripMenuItem
+            // 
+            this.layoutDebuggingToolStripMenuItem.Name = "layoutDebuggingToolStripMenuItem";
+            this.layoutDebuggingToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.layoutDebuggingToolStripMenuItem.Text = "Layout &Debugging";
+            this.layoutDebuggingToolStripMenuItem.ToolTipText = "When enabled, boxes are drawn around text elements to help refine their position";
+            this.layoutDebuggingToolStripMenuItem.Click += new System.EventHandler(this.layoutDebuggingToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
+            this.aboutToolStripMenuItem,
+            this.tsmiGoToWikiPage});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
@@ -90,7 +108,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -224,21 +242,12 @@
             this.btnOpenEditor.UseVisualStyleBackColor = true;
             this.btnOpenEditor.Click += new System.EventHandler(this.btnOpenEditor_Click);
             // 
-            // toolsToolStripMenuItem
+            // tsmiGoToWikiPage
             // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.layoutDebuggingToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.toolsToolStripMenuItem.Text = "&Tools";
-            // 
-            // layoutDebuggingToolStripMenuItem
-            // 
-            this.layoutDebuggingToolStripMenuItem.Name = "layoutDebuggingToolStripMenuItem";
-            this.layoutDebuggingToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.layoutDebuggingToolStripMenuItem.Text = "Layout &Debugging";
-            this.layoutDebuggingToolStripMenuItem.ToolTipText = "When enabled, boxes are drawn around text elements to help refine their position";
-            this.layoutDebuggingToolStripMenuItem.Click += new System.EventHandler(this.layoutDebuggingToolStripMenuItem_Click);
+            this.tsmiGoToWikiPage.Name = "tsmiGoToWikiPage";
+            this.tsmiGoToWikiPage.Size = new System.Drawing.Size(158, 22);
+            this.tsmiGoToWikiPage.Text = "Go to Wiki page";
+            this.tsmiGoToWikiPage.Click += new System.EventHandler(this.tsmiGoToWikiPage_Click);
             // 
             // frmPrototype
             // 
@@ -294,5 +303,6 @@
         private System.Windows.Forms.Button btnOpenEditor;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem layoutDebuggingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiGoToWikiPage;
     }
 }
