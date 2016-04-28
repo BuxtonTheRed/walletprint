@@ -148,6 +148,8 @@ namespace DogeAddress.Forms
         
         walletprint.WalletBundle bundle;
 
+        int artworkPixelWidth = 0;
+
         List<walletprint.CoinDef> coindefs;
 
         bool closingMyself = false;
@@ -346,8 +348,10 @@ namespace DogeAddress.Forms
 
             LoadTemplate(this.bundle.template);
 
+            LoadArtworkPixelWidth();
+
             // because bundles won't be saved without valid Artwork, we can automatically unlock the artwork-based UI things when we load a saved bundle
-            UnlockArtworkUI();
+            UpdateArtworkUI();
         }
 
         public void SaveBundle(string filepath)
@@ -367,12 +371,78 @@ namespace DogeAddress.Forms
 
         #region handy internal methods
 
-        void UnlockArtworkUI()
+        void UpdateArtworkUI()
         {
             btnSetWalletHeightFromArtworkAspect.Enabled = true;
             btnWalletExportArtwork.Enabled = true;
 
-            lblArtworkStatus.Text = "Artwork is loaded OK";
+            UpdateArtworkLabel();
+            
+        }
+
+        void LoadArtworkPixelWidth()
+        {
+            Image artwork = this.bundle.getArtworkImage();
+
+            if (artwork == null)
+            {
+                artworkPixelWidth = 0;
+            }
+            else
+            {
+                artworkPixelWidth = artwork.Width;
+            }
+        }
+
+        void UpdateArtworkLabel()
+        {
+            // if Wallet Width is defined, get it
+            double walletWidthMM;
+
+            if (artworkPixelWidth == 0)
+            {
+                lblArtworkStatus.Text = "Artwork Not Imported";
+            } else
+            {
+
+                if (double.TryParse(txtWalletWidth.Text, out walletWidthMM))
+                {
+                    // convert wallet width in MM to Inches
+                    double walletWidthInch = walletWidthMM * 0.0393701;
+
+                    double artworkDpi = (double)artworkPixelWidth / walletWidthInch;
+
+                    string dpiEvaluation;
+
+                    if (artworkDpi < 150)
+                        dpiEvaluation = "Very Bad";
+                    else if (artworkDpi >= 150 && artworkDpi < 200)
+                        dpiEvaluation = "Poor";
+                    else if (artworkDpi >= 200 && artworkDpi < 300)
+                        dpiEvaluation = "Fair";
+                    else if (artworkDpi >= 300 && artworkDpi < 450)
+                        dpiEvaluation = "Good";
+                    else if (artworkDpi >= 450 && artworkDpi < 650)
+                        dpiEvaluation = "Great";
+                    else if (artworkDpi >= 650 && artworkDpi < 800)
+                        dpiEvaluation = "More Than Enough";
+                    else if (artworkDpi >= 800 && artworkDpi < 1000)
+                        dpiEvaluation = "Completely Excessive...";
+                    else if (artworkDpi >= 1000)
+                        dpiEvaluation = "PLEASE REDUCE Artwork pixel size!";
+                    else
+                        dpiEvaluation = "DPI evaluation failed";
+
+                    lblArtworkStatus.Text = String.Format("Imported, {0:0.0} DPI - {1}", artworkDpi, dpiEvaluation);
+
+                }
+                else
+                {
+                    lblArtworkStatus.Text = "Loaded (DPI unknown, set Wallet Width)";
+                }
+            }
+
+            
         }
 
         void AddGuestCoin(string coinName, byte addresstype, bool isWIFstupid)
@@ -386,6 +456,8 @@ namespace DogeAddress.Forms
 
             ddlCoinSelect.SelectedItem = newCoin;
         }
+
+
 
         #endregion
 
@@ -499,7 +571,8 @@ namespace DogeAddress.Forms
             try
             {
                 Image imgtest = Image.FromFile(artworkFilePath);
-                double imgwidth = imgtest.Width;
+                int imgwidth = imgtest.Width;
+                artworkPixelWidth = imgwidth;
                 imgtest.Dispose();
             }
             catch   (Exception ex)
@@ -511,7 +584,7 @@ namespace DogeAddress.Forms
 
             this.bundle.importArtwork(artworkFilePath);
 
-            UnlockArtworkUI();
+            UpdateArtworkUI();
 
         }
 
@@ -573,7 +646,7 @@ namespace DogeAddress.Forms
                 return;
             }
 
-            string sCoinType = Microsoft.VisualBasic.Interaction.InputBox("What is the Address Version Number, also called the Network Version? (for example, Dogecoin's is 30, Bitcoin's is 0). Please enter in DECIMAL only, not Hex. If this coin is WIF-stupid (uses 0x80 as its WIF prefix, instead of 0x80 + Version Number), add a '!' on the END of the number.", "ADDRESS VERSION of coin?");
+            string sCoinType = Microsoft.VisualBasic.Interaction.InputBox("What is the Address Version Number, also called the Network Version?\n(See the Wiki for details)", "ADDRESS VERSION of coin?");
 
             if (sCoinType == "")
             {
@@ -605,5 +678,9 @@ namespace DogeAddress.Forms
 
         }
 
+        private void txtWalletWidth_TextChanged(object sender, EventArgs e)
+        {
+            UpdateArtworkLabel();
+        }
     }
 }

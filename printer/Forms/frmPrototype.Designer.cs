@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPrototype));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,12 @@
             this.chkWipeOutputAfterViewing = new System.Windows.Forms.CheckBox();
             this.sfdOutputFile = new System.Windows.Forms.SaveFileDialog();
             this.btnOpenEditor = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtNumberPages = new System.Windows.Forms.TextBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -123,10 +129,10 @@
             // btnFirstPrototype
             // 
             this.btnFirstPrototype.Enabled = false;
-            this.btnFirstPrototype.Location = new System.Drawing.Point(284, 198);
+            this.btnFirstPrototype.Location = new System.Drawing.Point(284, 250);
             this.btnFirstPrototype.Name = "btnFirstPrototype";
             this.btnFirstPrototype.Size = new System.Drawing.Size(203, 37);
-            this.btnFirstPrototype.TabIndex = 1;
+            this.btnFirstPrototype.TabIndex = 16;
             this.btnFirstPrototype.Text = "Print Page of Wallet(s)";
             this.btnFirstPrototype.UseVisualStyleBackColor = true;
             this.btnFirstPrototype.Click += new System.EventHandler(this.btnFirstPrototype_Click);
@@ -150,7 +156,7 @@
             // 
             // btnBrowseTemplate
             // 
-            this.btnBrowseTemplate.Location = new System.Drawing.Point(417, 30);
+            this.btnBrowseTemplate.Location = new System.Drawing.Point(417, 35);
             this.btnBrowseTemplate.Name = "btnBrowseTemplate";
             this.btnBrowseTemplate.Size = new System.Drawing.Size(70, 28);
             this.btnBrowseTemplate.TabIndex = 4;
@@ -205,7 +211,7 @@
             this.btnBrowseOutput.Location = new System.Drawing.Point(417, 130);
             this.btnBrowseOutput.Name = "btnBrowseOutput";
             this.btnBrowseOutput.Size = new System.Drawing.Size(70, 28);
-            this.btnBrowseOutput.TabIndex = 4;
+            this.btnBrowseOutput.TabIndex = 5;
             this.btnBrowseOutput.Text = "Browse...";
             this.btnBrowseOutput.UseVisualStyleBackColor = true;
             this.btnBrowseOutput.Click += new System.EventHandler(this.btnBrowseOutput_Click);
@@ -242,19 +248,57 @@
             // 
             // btnOpenEditor
             // 
-            this.btnOpenEditor.Location = new System.Drawing.Point(11, 210);
+            this.btnOpenEditor.Location = new System.Drawing.Point(11, 261);
             this.btnOpenEditor.Name = "btnOpenEditor";
             this.btnOpenEditor.Size = new System.Drawing.Size(209, 26);
-            this.btnOpenEditor.TabIndex = 11;
+            this.btnOpenEditor.TabIndex = 20;
             this.btnOpenEditor.Text = "Go To Template Editor";
             this.btnOpenEditor.UseVisualStyleBackColor = true;
             this.btnOpenEditor.Click += new System.EventHandler(this.btnOpenEditor_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(28, 184);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(435, 32);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "WARNING: Always TEST generated wallets before live use,\r\nespecially when using a " +
+    "newly-made or downloaded template.";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(281, 227);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Number of Pages to output:";
+            // 
+            // txtNumberPages
+            // 
+            this.txtNumberPages.Location = new System.Drawing.Point(417, 224);
+            this.txtNumberPages.MaxLength = 2;
+            this.txtNumberPages.Name = "txtNumberPages";
+            this.txtNumberPages.Size = new System.Drawing.Size(25, 20);
+            this.txtNumberPages.TabIndex = 14;
+            this.txtNumberPages.Text = "1";
+            this.txtNumberPages.Validating += new System.ComponentModel.CancelEventHandler(this.txtNumberPages_Validating);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // frmPrototype
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(499, 248);
+            this.ClientSize = new System.Drawing.Size(499, 299);
+            this.Controls.Add(this.txtNumberPages);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnOpenEditor);
             this.Controls.Add(this.chkWipeOutputAfterViewing);
             this.Controls.Add(this.chkOpenAfterGenerating);
@@ -277,6 +321,7 @@
             this.Load += new System.EventHandler(this.frmPrototype_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,5 +351,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem layoutDebuggingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tsmiGoToWikiPage;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtNumberPages;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

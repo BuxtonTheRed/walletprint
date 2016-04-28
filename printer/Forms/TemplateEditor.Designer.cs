@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label44 = new System.Windows.Forms.Label();
             this.ddlPrivkeyTextColour = new System.Windows.Forms.ComboBox();
             this.label25 = new System.Windows.Forms.Label();
             this.ddlPrivkeyTextRotation = new System.Windows.Forms.ComboBox();
@@ -135,7 +136,6 @@
             this.label43 = new System.Windows.Forms.Label();
             this.ddlCoinSelect = new System.Windows.Forms.ComboBox();
             this.btnAddGuestCoin = new System.Windows.Forms.Button();
-            this.label44 = new System.Windows.Forms.Label();
             this.groupBox4.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -182,6 +182,18 @@
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Private Key";
+            // 
+            // label44
+            // 
+            this.label44.AutoSize = true;
+            this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label44.ForeColor = System.Drawing.Color.Red;
+            this.label44.Location = new System.Drawing.Point(7, 300);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(266, 45);
+            this.label44.TabIndex = 56;
+            this.label44.Text = "IMPORTANT: Ensure that the Private Key\r\nis properly shown on the output wallets\r\n" +
+    "BEFORE you send coins to addresses";
             // 
             // ddlPrivkeyTextColour
             // 
@@ -973,6 +985,7 @@
             this.txtWalletWidth.Name = "txtWalletWidth";
             this.txtWalletWidth.Size = new System.Drawing.Size(71, 20);
             this.txtWalletWidth.TabIndex = 14;
+            this.txtWalletWidth.TextChanged += new System.EventHandler(this.txtWalletWidth_TextChanged);
             // 
             // label9
             // 
@@ -1063,10 +1076,10 @@
             // lblArtworkStatus
             // 
             this.lblArtworkStatus.AutoSize = true;
-            this.lblArtworkStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblArtworkStatus.Location = new System.Drawing.Point(268, 12);
+            this.lblArtworkStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblArtworkStatus.Location = new System.Drawing.Point(222, 10);
             this.lblArtworkStatus.Name = "lblArtworkStatus";
-            this.lblArtworkStatus.Size = new System.Drawing.Size(168, 17);
+            this.lblArtworkStatus.Size = new System.Drawing.Size(145, 15);
             this.lblArtworkStatus.TabIndex = 5;
             this.lblArtworkStatus.Text = "Artwork NOT IMPORTED!";
             // 
@@ -1074,7 +1087,7 @@
             // 
             this.label42.AutoSize = true;
             this.label42.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label42.Location = new System.Drawing.Point(188, 16);
+            this.label42.Location = new System.Drawing.Point(154, 12);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(74, 13);
             this.label42.TabIndex = 4;
@@ -1147,22 +1160,11 @@
             this.btnAddGuestCoin.UseVisualStyleBackColor = true;
             this.btnAddGuestCoin.Click += new System.EventHandler(this.btnAddGuestCoin_Click);
             // 
-            // label44
-            // 
-            this.label44.AutoSize = true;
-            this.label44.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label44.ForeColor = System.Drawing.Color.Red;
-            this.label44.Location = new System.Drawing.Point(7, 300);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(266, 45);
-            this.label44.TabIndex = 56;
-            this.label44.Text = "IMPORTANT: Ensure that the Private Key\r\nis properly shown on the output wallets\r\n" +
-    "BEFORE you send coins to addresses";
-            // 
             // frmTemplateEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(591, 691);
             this.Controls.Add(this.btnAddGuestCoin);
             this.Controls.Add(this.ddlCoinSelect);
@@ -1175,9 +1177,11 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox2);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(607, 729);
+            this.MinimumSize = new System.Drawing.Size(607, 400);
             this.Name = "frmTemplateEditor";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Template Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmTemplateEditor_FormClosing);
             this.Load += new System.EventHandler(this.frmTemplateEditor_Load);

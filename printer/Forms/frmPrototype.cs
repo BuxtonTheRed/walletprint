@@ -49,6 +49,20 @@ namespace DogeAddress.Forms
 
         private void btnFirstPrototype_Click(object sender, EventArgs e)
         {
+            int pagecount;
+
+            if (!int.TryParse(txtNumberPages.Text, out pagecount))
+            {
+                MessageBox.Show("Number of Pages is required", "Number of Pages is required", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (pagecount < 1 || pagecount > 99)
+            {
+                MessageBox.Show("Number of Pages must be between 1-99", "Invalid Number of Pages", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             // todo: take this out of the UI thread, put it in a class and run on a worker thread
             // and also rename this button - it's been a long time since this was my original prototype
 
@@ -70,8 +84,9 @@ namespace DogeAddress.Forms
 
             CoinDef thiscoin = new CoinDef(bundle.template.CoinName, bundle.template.CoinAddressType, bundle.template.CoinIsWIFstupid);
 
-            logFile.WriteLine(string.Format( "Generating wallets for coin {0}", thiscoin.ToString()));
-            logFile.WriteLine("Using template: " + bundle.template.TemplateDescription);
+            logFile.WriteLine(string.Format("Paper Wallet Printer version {0}", Application.ProductVersion));
+            logFile.WriteLine(string.Format("Generating wallets for coin {0}", thiscoin.ToString()));
+            logFile.WriteLine("Using template: " + bundle.template.TemplateDescription.Replace("\n", " ")); // removes any line breaks from template description as it writes it to the log file
 
             bundle.template.LayoutDebugging = layoutDebuggingToolStripMenuItem.Checked;
 
@@ -82,68 +97,140 @@ namespace DogeAddress.Forms
 
             // make a pdfSharp document
             PdfDocument doc = new PdfDocument();
-
-            // and put a page on it
-            PdfPage page = doc.AddPage();
-
             int batchNumber = 1;
+            bool crashingOut = false;
 
-            // note: if you change anything that gets written to logFile from this point until the end-marker is written, this will probably cause
-            // compatibility issues with the Loader tool, which expects to be able to parse the log between these points
-            logFile.WriteLine("Generated Addresses:");
-            logFile.WriteLine();
+            XImage imgArtwork = XImage.FromGdiPlusImage(bundle.getArtworkImage());
 
-            page.Size = bundle.template.pagePrintPaperSize;
-
-            using (XGraphics gfx = XGraphics.FromPdfPage(page, XPageDirection.Downwards))
+            // loop for each page
+            for (int pageNumber = 1; pageNumber <= pagecount; pageNumber++)
             {
+                // and put a page on it
+                PdfPage page = doc.AddPage();
 
-                // LOOP
-                for (int y = 0; y < bundle.template.pagePrintRows; y++)
+                // note: if you change anything that gets written to logFile from this point until the end-marker is written, this will probably cause
+                // compatibility issues with the Loader tool, which expects to be able to parse the log between these points
+                logFile.WriteLine(string.Format("Generating Page {0} of {1}", pageNumber, pagecount));
+                logFile.WriteLine("Generated Addresses:");
+                logFile.WriteLine();
+
+                page.Size = bundle.template.pagePrintPaperSize;
+                
+                using (XGraphics gfx = XGraphics.FromPdfPage(page, XPageDirection.Downwards))
                 {
-
-                    for (int x = 0; x < bundle.template.pagePrintCols; x++)
+                    // LOOP Down
+                    for (int y = 0; y < bundle.template.pagePrintRows; y++)
                     {
-                        // get PrivKey and Address for this new Wallet
-                        KeyPair kp = KeyPair.CreateX(ExtraEntropy.GetEntropy(), false, bundle.template.CoinAddressType, bundle.template.CoinIsWIFstupid);
-                        
-                        KeyCollectionItem item = new KeyCollectionItem(kp);
+                        // LOOP Across
+                        for (int x = 0; x < bundle.template.pagePrintCols; x++)
+                        {
+                            try
+                            {
+                                // get PrivKey and Address for this new Wallet
+                                KeyPair kp = KeyPair.CreateX(ExtraEntropy.GetEntropy(), false, bundle.template.CoinAddressType, bundle.template.CoinIsWIFstupid);
 
-                        string address = item.GetAddressBase58();
+                                KeyCollectionItem item = new KeyCollectionItem(kp);
 
-                        logFile.WriteLine(address);
+                                string address = item.GetAddressBase58();
 
-                        // get an XForm of our Wallet
-                        XForm walletForm = getSingleWallet(doc, bundle, address, item.PrivateKey, batchNumber, bundle.template.LayoutDebugging);
-                        batchNumber++;
+                                logFile.WriteLine(address);
 
-                        // make a wild-assed guess at where to draw the Form
-                        XUnit walletLeft = XUnit.FromMillimeter(bundle.template.pagePrintLeftMarginMM + ((bundle.template.widthMM + bundle.template.pagePrintColGap) * x));
-                        XUnit walletTop = XUnit.FromMillimeter(bundle.template.pagePrintTopMarginMM + ((bundle.template.heightMM + bundle.template.pagePrintRowGap) * y));
+                                // get an XForm of our Wallet
+                                using (XForm walletForm = getSingleWallet(doc, bundle, imgArtwork, address, item.PrivateKey, batchNumber, bundle.template.LayoutDebugging))
+                                {
+                                    // decide where on the page to draw this wallet XForm object
+                                    XUnit walletLeft = XUnit.FromMillimeter(bundle.template.pagePrintLeftMarginMM + ((bundle.template.widthMM + bundle.template.pagePrintColGap) * x));
+                                    XUnit walletTop = XUnit.FromMillimeter(bundle.template.pagePrintTopMarginMM + ((bundle.template.heightMM + bundle.template.pagePrintRowGap) * y));
 
-                        XPoint whereToPutTheForm = new XPoint(walletLeft.Point, walletTop.Point);
-                        gfx.DrawImage(walletForm, whereToPutTheForm);
+                                    XPoint whereToPutTheForm = new XPoint(walletLeft.Point, walletTop.Point);
+                                    gfx.DrawImage(walletForm, whereToPutTheForm);
+                                }
 
-                        // ENDLOOP
+                                batchNumber++;
+                            }
+                            catch (Exception ex)
+                            {
+                                // well, damn...
+                                logFile.WriteLine("--- CRASH! ---");
+                                logFile.WriteLine("Encountered Unhandled Exception inside primary Y-X Print Loop");
+                                logFile.WriteLine("Exception:");
+                                logFile.WriteLine(ex.Message);
+                                logFile.WriteLine(ex.Source);
+                                logFile.WriteLine(ex.StackTrace);
+
+                                crashingOut = true;
+
+                                break;
+                            }
+
+
+
+                        }
+
+                        if (crashingOut)
+                            break;
                     }
+
                 }
 
+                if (crashingOut)
+                    break;
+
+                logFile.WriteLine();
+                logFile.WriteLine("end");
+                logFile.WriteLine();
             }
 
-            logFile.WriteLine();
-            logFile.WriteLine("end");
+            if (!crashingOut)
+            {
+                logFile.WriteLine("Internal PDF Generation completed OK");
 
-            // ok, you can fiddle with the logFile again now
+                if (File.Exists(outputFile))
+                    File.Delete(outputFile);
+
+                try
+                {
+                    doc.Save(outputFile);
+                }
+                catch (Exception ex)
+                {
+                    logFile.WriteLine("--- CRASH! ---");
+                    logFile.WriteLine("Encountered Unhandled Exception when Saving PDF from Object to File");
+                    logFile.WriteLine("Exception:");
+                    logFile.WriteLine(ex.Message);
+                    logFile.WriteLine(ex.Source);
+                    logFile.WriteLine(ex.StackTrace);
+
+                    crashingOut = true;
+                }
+
+                logFile.WriteLine("PDF saved to File OK - all done");
+            }
+
 
             logFile.Close();
-            
-            if (File.Exists(outputFile))
-                File.Delete(outputFile);
 
-            doc.Save(outputFile);
+            // if we have failed in generating the PDF in to memory, or failed when saving it to file - show an error to the user, directing them to to the log file
+            if (crashingOut)
+            {
+                this.Text = previousCaption;
+                btnFirstPrototype.Enabled = true;
+                this.UseWaitCursor = false;
+
+                string errmsg = string.Format("Sorry, Wallet Printing has failed. See the log file for details.\n\nLog file:\n{0}", logFilePath);
+
+                MessageBox.Show(errmsg, "Printing Failed, Internal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
+            
 
             if (chkOpenAfterGenerating.Checked)
             {
+                // note the current datetime, for comparison if we're trying to wait for PDF Viewer
+                DateTime timeOfStartingViewer = DateTime.Now;
+
                 System.Diagnostics.Process procViewer = System.Diagnostics.Process.Start(outputFile);
 
                 if (chkWipeOutputAfterViewing.Checked)
@@ -154,19 +241,24 @@ namespace DogeAddress.Forms
 
                     procViewer.WaitForExit();
 
-                    // do some kind of deleting and/or overwriting on the output file here
-                    
+                    // ok, we *think* that maybe their PDF viewer has closed. But that might not be true.
+
+                    // check to see if we were delayed by a Suspiciously Short length of time
+                    TimeSpan timeWaitedForViewer = DateTime.Now - timeOfStartingViewer;
+
+                    if (timeWaitedForViewer.TotalSeconds < 15)
+                    {
+                        MessageBox.Show("I think your PDF viewer closed really quickly - or I cannot detect if you are done with the generated PDF.\n\nPlease click OK when you are ready for me to delete the generated PDF.", "Ready to delete PDF file?", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                    }
+
+                    // overwrite contents of PDF with junk, then delete. This won't be secure against serious forensic attack in all situations, but it's better than just-delete
                     FileInfo info = new FileInfo(outputFile);
 
                     byte[] junkbytes = new byte[info.Length];
-
-                    
                     MemSet(junkbytes, 255);
                     File.WriteAllBytes(outputFile, junkbytes);
 
                     File.Delete(outputFile);
-
-                    
                 }
             }
 
@@ -243,7 +335,7 @@ namespace DogeAddress.Forms
         }
 
         // draws a single Paper Wallet in to a PdfSharp XForm
-        private PdfSharp.Drawing.XForm getSingleWallet(PdfDocument doc, WalletBundle b, string address, string privkey, int numberWithinBatch, bool layoutDebugging)
+        private PdfSharp.Drawing.XForm getSingleWallet(PdfDocument doc, WalletBundle b, XImage imgArtwork, string address, string privkey, int numberWithinBatch, bool layoutDebugging)
         {
             WalletTemplate t = b.template;
 
@@ -260,7 +352,14 @@ namespace DogeAddress.Forms
             {
                 XGraphicsState state = formGfx.Save();
 
-                formGfx.DrawImage(XImage.FromGdiPlusImage(b.getArtworkImage()), new RectangleF(0f, 0f, (float)walletSizeWide.Point, (float)walletSizeHigh.Point));
+                bool interpolateArtwork = true;
+                bool interpolateQRcodes = false;
+
+                // XImage imgArtwork is now provided by caller, so this process only has to be done ONCE - because the artwork does not change between Wallets in a run!
+                //XImage imgArtwork = XImage.FromGdiPlusImage(b.getArtworkImage());
+                imgArtwork.Interpolate = interpolateArtwork;
+
+                formGfx.DrawImage(imgArtwork, new RectangleF(0f, 0f, (float)walletSizeWide.Point, (float)walletSizeHigh.Point));
 
                 // draw the QR codes and legible-text things
 
@@ -268,7 +367,7 @@ namespace DogeAddress.Forms
                 // QR
                 Bitmap bmpAddress = BtcAddress.QR.EncodeQRCode(address);
                 XImage imgAddress = XImage.FromGdiPlusImage(bmpAddress);
-                imgAddress.Interpolate = false;
+                imgAddress.Interpolate = interpolateQRcodes;
 
                 XUnit addressQrLeft = XUnit.FromMillimeter(t.addressQrLeftMM);
                 XUnit addressQrTop = XUnit.FromMillimeter(t.addressQrTopMM);
@@ -335,7 +434,7 @@ namespace DogeAddress.Forms
                 // QR
                 Bitmap bmpPrivkey = BtcAddress.QR.EncodeQRCode(privkey);
                 XImage imgPrivkey = XImage.FromGdiPlusImage(bmpPrivkey);
-                imgPrivkey.Interpolate = false;
+                imgPrivkey.Interpolate = interpolateQRcodes;
 
                 XUnit privkeyQrLeft = XUnit.FromMillimeter(t.privkeyQrLeftMM);
                 XUnit privkeyQrTop = XUnit.FromMillimeter(t.privkeyQrTopMM);
@@ -547,6 +646,30 @@ namespace DogeAddress.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error Launching Browser", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void txtNumberPages_Validating(object sender, CancelEventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+
+            try
+            {
+                int x = int.Parse(txt.Text);
+                if (x >= 1 && x <= 99)
+                {
+                    errorProvider1.SetError(txt, "");
+                }
+                else
+                {
+                    errorProvider1.SetError(txt, "Must be in range 1-99");
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                errorProvider1.SetError(txt, "Not a valid whole (integer) number");
             }
         }
     }
